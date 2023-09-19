@@ -107,9 +107,9 @@ sudo mysql_secure_installation
 #If you would like to continue to use the unix_socket method, then edit the 50-server.cnf file.
 #-sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
 #Add the following line in the [mariadb] unit at the bottom.
-#-plugin_load_add = auth_socket
+#plugin_load_add = auth_socket
 #Save and close the file. Then restart MariaDB server for the change to take effect.
-#-sudo systemctl restart mariadb
+#sudo systemctl restart mariadb
 
 # Set up MySQL Database. This can be done by entering the following command
 clear
@@ -156,7 +156,12 @@ sudo a2enmod rewrite
 
 # Restart Apache for changes to take effect
 sudo service apache2 restart
-# systemctl status php*-fpm.service
+
+sudo a2ensite ossm.conf
+sudo /etc/init.d/apache2 restart
+sudo systemctl reload apache2
+#systemctl status php*-fpm.service
+#sudo a2dissite 000-default.conf
 
 # Change directory and install OSSM,cd /var/www/
 cd $DOCROOT
@@ -200,13 +205,13 @@ sudo service apache2 restart
 
 #sudo nano /etc/hosts
 #>127.0.0.1 localhost burma.trade www.burma.trade
-#>35.197.157.247 burma.trade www.burma.trade
+#>34.142.231.242 burma.trade www.burma.trade
 #Save the hosts file. Otherwise, you will get an error "MOD_REWRITE REQUIRED".
 #>sudo systemctl restart apache2
 #Open an Apache config file to set the Global ServerName 
 #>sudo nano /etc/apache2/apache2.conf
 #Add this line at the end of the file, then save and exit your server IP
-#>ServerName 35.197.157.247
+#>ServerName 34.142.231.242
 #Check for any syntax errors we may have introduced
 #>sudo apache2ctl configtest
 #Enable Apache rewrite (this resolves most post-installation 404 errors) 
@@ -423,8 +428,7 @@ apachectl -M | grep ssl
 sudo a2enmod ssl
 sudo systemctl restart apache2
 
-/etc/letsencrypt/options-ssl-apache.conf
-sudo nano /etc/letsencrypt/options-ssl-apache.conf
+#sudo a2dissite 000-default.conf
 
 or else:
 sudo apt install certbot python3-certbot-apache
@@ -523,4 +527,15 @@ echo "That's it! We're done. Open your browser and navigate"
 echo "to http://yourserver/ and finish setup"
 -"
 echo ""
+
+
+sudo a2ensite ossm.conf
+sudo /etc/init.d/apache2 restart
+sudo systemctl reload apache2
+
+
+https://www.linuxtuto.com/how-to-install-apache-with-lets-encrypt-on-ubuntu-22-04/
+https://gist.github.com/shafiqsaaidin/c0d61921b16af45cae856f4173a28592
+https://serverspace.io/support/help/how-to-get-lets-encrypt-ssl-on-ubuntu/
+https://www.opensource-socialnetwork.org/discussion/view/2520/switch-from-http-to-https-with-ossn
 
