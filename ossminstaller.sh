@@ -167,9 +167,9 @@ clear
 
 # Create directories for OSSM
 DOCROOT=/var/www
-sudo mkdir $DOCROOT/public_html
-sudo mkdir $DOCROOT/public_html/ossm
-sudo mkdir $DOCROOT/public_html/ossn_data
+#sudo mkdir $DOCROOT/public_html
+sudo mkdir $DOCROOT/ossm
+sudo mkdir $DOCROOT/ossn_data
 #sudo rm -rf $DOCROOT/html
 
 # Backup old and create new configuration file for Apache2
@@ -199,7 +199,7 @@ sudo systemctl reload apache2
 
 # Change the directory and install OSSM
 #cd /var/www/public_html
-DOCROOT=/var/www/public_html/
+DOCROOT=/var/www/
 cd $DOCROOT
 #sudo wget https://github.com/KHUNARKERTHEIN/ossmn/archive/refs/heads/main.zip
 sudo wget https://github.com/AUNGSUBWAY/myanmar/archive/refs/heads/main.zip
@@ -218,7 +218,7 @@ sudo service apache2 restart
 
 # Set correct ownership and permissions
 
-DOCROOT=/var/www/public_html/
+DOCROOT=/var/www/
 sudo chgrp www-data $DOCROOT/ossm*
 sudo chmod g+w $DOCROOT/ossm*
 sudo chown -R www-data:www-data $DOCROOT/ossm
@@ -228,7 +228,7 @@ sudo chown -R www-data:www-data $DOCROOT/ossm/*
 sudo service apache2 restart
 
 # Finished for dir ossn_data.
-DOCROOT=/var/www/public_html/
+DOCROOT=/var/www/
 sudo chmod -R 755 $DOCROOT/ossn_data/
 sudo chown -R www-data:www-data $DOCROOT/ossn_data
 sudo service apache2 restart
