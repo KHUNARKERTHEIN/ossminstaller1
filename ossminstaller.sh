@@ -22,39 +22,68 @@ read -s
 
 # Check system for updates and install required programs
 sudo apt update && sudo apt dist-upgrade -y
+sudo apt autoremove
+sudo apt upgrade -y
 sudo apt install unzip -y
 
 # Install LAMP packages and create UFW Firewall rules
 sudo apt install apache2 -y
-sudo ufw allow in "Apache full"
+#sudo ufw allow in "Apache full"
+sudo ufw allow 'Apache Full'
 sudo ufw allow 22/tcp
-sudo ufw allow 53
 sudo ufw allow 53/udp
-sudo ufw allow 80,443,25,587,465,143,993/tcp
+sudo ufw allow 53,80,443,25,587,465,143,993/tcp
 sudo ufw logging on
 sudo ufw logging medium
 sudo ufw enable
 sudo apache2ctl -t
 sudo systemctl enable ufw
 sudo systemctl reload apache2
-sudo apt install software-properties-common && sudo add-apt-repository ppa:ondrej/php -y
+
+#Install PHP
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:ondrej/php -y
+sudo add-apt-repository ppa:ondrej/apache2
 sudo apt update
 sudo apt install php8.2-cli
 sudo apt install php8.2 libapache2-mod-php8.2 php8.2-mysql php8.2-soap php8.2-bcmath php8.2-xml php8.2-mbstring php8.2-gd php8.2-common php8.2-cli php8.2-curl php8.2-intl php8.2-dev php8.2-zip zip unzip -y
-sudo apt install php8.2-{bcmath,common,xml,fpm,mysql,zip,intl,ldap,gd,cli,bz2,curl,mbstring,pgsql,opcache,soap,xsl,cgi} -y
+sudo apt install php8.2-{bcmath,common,xml,mysql,zip,intl,ldap,gd,cli,bz2,curl,mbstring,pgsql,opcache,soap,xsl,cgi} -y
 sudo apt-get install php8.2-phpdbg
 sudo apt-get install libphp8.2-embed
+sudo apt install php8.2-imagick
+sudo apt install php8.2-sqlite3
+sudo apt install php8.2-imap
+sudo apache2ctl -t
+
+#sudo apt install php8.2-fpm
+#sudo systemctl enable php8.2-fpm
+#sudo systemctl status php8.2-fpm
+#sudo systemctl restart php8.2-fpm
 #sudo apt-get remove php8.*
 #sudo apt-get purge php8.*
 #sudo apt-get autoclean
 #sudo apt-get autoremove
-#mcrypt is no more supported in php 7.3 Install PHP-FPM >
-sudo a2enmod proxy_fcgi setenvif
-sudo systemctl restart apache2
-sudo a2enconf php8.2-fpm
+#mcrypt is no more supported in php 7.3 Install PHP-FPM
+#sudo a2enmod proxy_fcgi setenvif
+#sudo systemctl restart apache2
+#sudo a2enconf php8.2-fpm
+#sudo systemctl reload apache2
+#sudo nmap ....
+#sudo netstat -lnpu
+#sudo ufw status verbose
 sudo systemctl reload apache2
+#IonCube is not available on Ubuntu 22.04 base repository,The following command below to download the latest
+sudo apt update && sudo apt upgrade -y
 sudo apt autoremove
+#Install PHP Ioncube
+sudo apt install wget apt-transport-https gnupg2 software-properties-common
+sudo wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
+sudo tar -xvzf ioncube_loaders_lin_x86-64.tar.gz
+sudo systemctl restart apache2
+clear
 
+#If you see the extracted files you can see the loaders for each PHP version:
+#
 #Install IonCube Loader on Ubuntu 22.04 LTS Jammy Jellyfish
 #First, make sure that all your system packages are up-to-date.
 #>sudo apt update && sudo apt upgrade -y
@@ -63,6 +92,7 @@ sudo apt autoremove
 #>sudo wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
 #Next, extract the downloaded file using the following command:
 #>sudo tar -xvzf ioncube_loaders_lin_x86-64.tar.gz
+#
 #If you see the extracted files you can see the loaders for each PHP version:
 #>cd ioncube #>ls 
 #You will see something similar to this:
@@ -90,10 +120,15 @@ sudo apt autoremove
 #sudo systemctl restart php8.2-fpm
 #sudo systemctl restart apache2
 #php -v | php -m | # cd 
+#
 
 #install Mariadb
-sudo apt install mariadb-server -y
+sudo apt install mariadb-server mariadb-client -y
+sudo systemctl start mariadb
 sudo systemctl enable mariadb
+
+#sudo apt install mariadb-server -y
+#systemctl status mariadb.service
 
 # Clear screen and update user
 clear
@@ -101,16 +136,17 @@ echo "Starting MySQL Secure Installation..."
 echo ""
 
 #Set up mysql_secure_installation
-sudo mysql_secure_installation
-#-sudo mysql -e "show engines"
 
+sudo mysql_secure_installation
+sudo /etc/init.d/apache2 restart
+
+#-sudo mysql -e "show engines"
 #If you would like to continue to use the unix_socket method, then edit the 50-server.cnf file.
 #-sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
 #Add the following line in the [mariadb] unit at the bottom.
 #plugin_load_add = auth_socket
 #Save and close the file. Then restart MariaDB server for the change to take effect.
 #sudo systemctl restart mariadb
-
 # Set up MySQL Database. This can be done by entering the following command
 clear
 #echo "CREATE DATABASE ossn"
@@ -123,19 +159,17 @@ clear
 
 #>ls /run/php/
 # sudo systemctl enable mariadb
-# sudo systemctl enable php8.2-fpm
 # sudo systemctl enable apache2
 # sudo systemctl restart apache2
-# sudo systemctl restart php8.2-fpm
 # sudo systemctl restart mariadb
-# sudo systemctl status php8.2-fpm
 # sudo systemctl status mariadb
 # sudo systemctl status apache2
 
 # Create directories for OSSM
-DOCROOT=/var/www/html/
-sudo mkdir $DOCROOT/ossm
-sudo mkdir $DOCROOT/ossn_data
+DOCROOT=/var/www
+sudo mkdir $DOCROOT/public_html
+sudo mkdir $DOCROOT/public_html/ossm
+sudo mkdir $DOCROOT/public_html/ossn_data
 #sudo rm -rf $DOCROOT/html
 
 # Backup old and create new configuration file for Apache2
@@ -151,26 +185,40 @@ sudo phpenmod xml
 sudo phpenmod gd
 sudo phpenmod zip
 sudo phpenmod mbstring
-#sudo phpenmod json
 sudo a2enmod rewrite
 
-# Restart Apache for changes to take effect
+#sudo phpenmod json
+#Restart Apache for changes to take effect
 sudo service apache2 restart
 
 sudo a2ensite ossm.conf
-sudo /etc/init.d/apache2 restart
 sudo systemctl reload apache2
+
 #systemctl status php*-fpm.service
 #sudo a2dissite 000-default.conf
 
-# Change directory and install OSSM,cd /var/www/
+# Change the directory and install OSSM
+#cd /var/www/public_html
+DOCROOT=/var/www/public_html/
 cd $DOCROOT
-sudo wget https://github.com/KHUNARKERTHEIN/ossm/archive/refs/heads/master.zip
-sudo unzip master.zip
-sudo mv ossm-master/* ossm/
-sudo rm -rf ossm-master master.zip
+#sudo wget https://github.com/KHUNARKERTHEIN/ossmn/archive/refs/heads/main.zip
+sudo wget https://github.com/AUNGSUBWAY/myanmar/archive/refs/heads/main.zip
+sudo unzip main.zip
+sudo mv myanmar-main/* ossm/
+sudo rm -rf myanmar-main main.zip
+sudo service apache2 restart
+
+#DOCROOT=/var/www/public_html/
+#cd $DOCROOT
+#sudo wget https://github.com/KHUNARKERTHEIN/ossm/archive/refs/heads/master.zip
+#sudo unzip master.zip
+#sudo mv ossm-master/* ossm/
+#sudo rm -rf ossm-master master.zip
+#sudo service apache2 restart
 
 # Set correct ownership and permissions
+
+DOCROOT=/var/www/public_html/
 sudo chgrp www-data $DOCROOT/ossm*
 sudo chmod g+w $DOCROOT/ossm*
 sudo chown -R www-data:www-data $DOCROOT/ossm
@@ -179,29 +227,18 @@ sudo chown -R www-data:www-data $DOCROOT/ossm/*
 # Restart Apache for changes to take effect
 sudo service apache2 restart
 
-# Install phpmyadmin
-sudo apt install phpmyadmin -y
-#fix:phpmyadmin-deprecation-notice error /usr/share/phpmyadmin/config.inc.php or
-#>sudo nano /etc/phpmyadmin/config.inc.php
-#should technically correspond to this: at the bottom;
-#>$cfg['SendErrorReports'] = 'never';
-#>sudo systemctl restart apache2
-#fix:phpmyadmin root log in error
-#>sudo systemctl status mysql.service
-#>sudo mysql
-#>mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1';
-#or > sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1'"
-#Exit; or \q and now run
-#sudo systemctl restart apache2
-#login:ip/phpmyadmin with root and passwd.
-
-# Finished use cli for dir ossn_data.
+# Finished for dir ossn_data.
+DOCROOT=/var/www/public_html/
 sudo chmod -R 755 $DOCROOT/ossn_data/
 sudo chown -R www-data:www-data $DOCROOT/ossn_data
 sudo service apache2 restart
 sudo apt update
 sudo apt install ffmpeg -y
 sudo service apache2 restart
+
+sudo apt install openssl -y
+sudo apt install nmap -y
+sudo apt install net-tools -y
 
 #sudo nano /etc/hosts
 #>127.0.0.1 localhost burma.trade www.burma.trade
@@ -218,6 +255,23 @@ sudo service apache2 restart
 #>sudo a2enmod rewrite
 #Restart Apache for any changes to take effect 
 #>sudo systemctl restart apache2
+
+# Install phpmyadmin
+sudo apt install phpmyadmin -y
+sudo apache2ctl configtest && sudo systemctl restart apache2
+#fix:phpmyadmin-deprecation-notice error /usr/share/phpmyadmin/config.inc.php or
+#>sudo nano /etc/phpmyadmin/config.inc.php
+#should technically correspond to this: at the bottom;
+#>$cfg['SendErrorReports'] = 'never';
+#>sudo systemctl restart apache2
+#fix:phpmyadmin root log in error
+#>sudo systemctl status mysql.service
+#>sudo mysql
+#>mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1';
+#> sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1'"
+#Exit; or \q and now run
+#sudo systemctl restart apache2
+#login:ip/phpmyadmin with root and passwd.
 
 clear
 echo ""
@@ -263,15 +317,17 @@ MariaDB [(none)]> EXIT;
 sudo nano /etc/phpmyadmin/config.inc.php
 should technically correspond to this: at the bottom;
 $cfg['SendErrorReports'] = 'never';
-systemctl restart apache2
+sudo systemctl restart apache2
 #fix:phpmyadmin root log in error
-systemctl status mysql.service
+sudo systemctl status mysql.service
+
 sudo mysql
 mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1';
 Exit; or \q and now run
 systemctl restart apache2
 login:ip/phpmyadmin
 root and pass
+
 #choose PHP as the default.
 sudo update-alternatives --config php
 sudo systemctl restart apache2
@@ -281,14 +337,14 @@ systemctl status php*-fpm.service
 ls  -1 /etc/php/8.2/fpm
 sudo nano /etc/hosts
 127.0.0.1 localhost burma.trade www.burma.trade
-35.197.157.247 burma.trade www.burma.trade
+34.16.21.71 burma.trade www.burma.trade
 #Save the hosts file. Otherwise, you will get an error "MOD_REWRITE REQUIRED".
 sudo systemctl restart apache2
 
 #Open an Apache config file to set the Global ServerName 
 sudo nano /etc/apache2/apache2.conf
 #Add this line at the end of the file, then save and exit your server IP
-ServerName 35.197.157.247
+ServerName 34.16.21.71
 Check for any syntax errors we may have introduced
 sudo apache2ctl configtest
 Enable Apache rewrite (this resolves most post-installation 404 errors) 
@@ -307,7 +363,7 @@ sudo ufw logging on
 sudo ufw logging medium
 sudo ufw enable
 sudo apt install nmap -y
-sudo nmap 35.197.157.247
+sudo nmap 34.16.21.71
 sudo apt install net-tools
 sudo netstat -lnpu
 sudo ufw status verbose
@@ -335,6 +391,25 @@ $ sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 128M/" /etc/php/
 $ sudo sed -i "s/zlib.output_compression = .*/zlib.output_compression = on/" /etc/php/8.2/fpm/php.ini
 $ sudo sed -i "s/max_execution_time = .*/max_execution_time = 18000/" /etc/php/8.2/fpm/php.ini
 $ sudo sed -i "s/date.timezone = .*/date.timezone = Asia/Yangon/" /etc/php/8.2/fpm/php.ini
+###
+$ sudo sed -i "s/memory_limit = .*/memory_limit = 4G/" /etc/php/8.2/cli/php.ini
+###
+
+sudo nano /etc/php/8.2/apache2/php.ini
+
+sudo sed -i "s/memory_limit = .*/memory_limit = 4G/" /etc/php/8.2/apache2/php.ini
+sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 256M/" /etc/php/8.2/apache2/php.ini
+sudo sed -i "s/post_max_size = .*/post_max_size = 256M/" /etc/php/8.2/apache2/php.ini
+sudo sed -i "s/zlib.output_compression = .*/zlib.output_compression = on/" /etc/php/8.2/apache2/php.ini
+sudo sed -i "s/max_execution_time = .*/max_execution_time = 36000/" /etc/php/8.2/apache2/php.ini
+sudo sed -i "s/max_input_time = .*/max_input_time = 1800/" /etc/php/8.2/apache2/php.ini
+### and uncomment ;
+sudo sed -i "s/short_open_tag = .*/short_open_tag = On/" /etc/php/8.2/apache2/php.ini
+sudo sed -i "s/max_input_vars = .*/max_input_vars = 10000/" /etc/php/8.2/apache2/php.ini
+sudo sed -i "s/realpath_cache_size = .*/realpath_cache_size = 10M/" /etc/php/8.2/apache2/php.ini   
+sudo sed -i "s/realpath_cache_ttl = .*/realpath_cache_ttl = 7200/" /etc/php/8.2/apache2/php.ini
+
+date.timezone = Asia/Yangon
 
 ###
 php --ini | grep "Loaded Configuration File"
@@ -362,7 +437,8 @@ fix: ===========phpmyadmin root log in error:
 systemctl status mysql.service
 sudo mysql
 mysql> 
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1'; or admin@:
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1'; 
+## or admin@:
 Exit; or \q and now run:systemctl restart apache2
 login:ip/phpmyadmin:root=pw:
 sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1'"
@@ -382,6 +458,7 @@ You will see something similar to this:
 ioncube_loader_lin_7.0.so     ioncube_loader_lin_8.1.so
 Step 3. PHP Configuration File.
 Once you have downloaded the IonCube Loader, you need to move it to the PHP extension directory.
+
 php -i | grep extension_dir
 You should see the following output:
 extension_dir => /usr/lib/php/20220829 => /usr/lib/php/20220829
@@ -397,50 +474,40 @@ If you have a different version of PHP installed, the location of the file will 
 Now open your php.ini file using the following command below:
 #sudo nano /etc/php/8.2/cli/php.ini
 zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
-#sudo nano /etc/php/8.2/fpm/php.ini
-zend_extension=/usr/lib/php/20210902/ioncube_loader_lin_8.2.so
+
 #sudo nano /etc/php/8.2/apache2/php.ini
-zend_extension=/usr/lib/php/20210902/ioncube_loader_lin_8.2.so
+zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
 Add the following line at the end of the php.ini file
-zend_extension=/usr/lib/php/20210902/ioncube_loader_lin_8.2.so
+
+#sudo nano /etc/php/8.2/fpm/php.ini
+zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
 sudo service php8.2-fpm restart
 sudo systemctl restart php8.2-fpm
+
 sudo systemctl restart apache2
+
 Finally, check the installed PHP version.
 php -v
 
-
 #Install SSL
 https://certbot.eff.org/
-
 sudo apt-get remove certbot
 sudo snap install --classic certbot
 certbot --version
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
-sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo certbot --apache
-#sudo certbot --apache -d burma.trade,www.burma.trade
 sudo certbot certonly --apache
 #burma.trade,www.burma.trade
 sudo systemctl reload apache2
-
+#
 apachectl -M | grep ssl
 sudo a2enmod ssl
 sudo systemctl restart apache2
-
 #sudo a2dissite 000-default.conf
-
 or else:
 sudo apt install certbot python3-certbot-apache
 sudo certbot --apache --agree-tos --redirect --uir --hsts --staple-ocsp --must-staple -d burma.trade,www.burma.trade --email info@burma.trade
-
-
-Certificate is saved at: /etc/letsencrypt/live/burma.trade/fullchain.pem
-Key is saved at:         /etc/letsencrypt/live/burma.trade/privkey.pem
-
-
 sudo systemctl reload apache2
-
 The command to renew certbot is installed in one of the following locations:
 ###
 /etc/crontab/
@@ -466,52 +533,41 @@ sudo apt-get install libcanberra-gtk-module
 sudo apt-get install --reinstall libcanberra-gtk-module
 sudo apt-get install libcanberra-gtk*
 ###
-
 burma.trade. IN CAA 0 issue "letsencrypt.org"
 burma.trade. IN CAA 0 iodef "mailto:your-email-address"
 dig burma.trade CAA
-
 APACHE=/etc/apache2/sites-available    or  APACHE=/etc/apache2/sites-enabled
 cd $APACHE
-
 sudo nano /etc/apache2/sites-enabled/000-default.conf
 sudo nano /etc/apache2/sites-enabled/000-default-le-ssl.conf
 cd /etc/apache2/sites-enabled/
 sudo nano 000-default.conf
 sudo nano 000-default-le-ssl.conf
-
 sudo nano /etc/apache2/sites-available/000-default.conf
 sudo nano /etc/apache2/sites-available/default-ssl.conf
 cd /etc/apache2/sites-available/
 sudo nano 000-default.conf
 sudo nano default-ssl.conf
-
 sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf.bak
 sudo cp /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf.bak
-
 sudo cp /etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled/000-default.conf.bak
 sudo cp /etc/apache2/sites-enabled/000-default-le-ssl.conf /etc/apache2/sites-enabled/000-default-le-ssl.conf.bak
-
 sudo mv 000-default.conf.bak 000-default.conf.baks
-
-sudo apt update
-
-sudo apt dist-upgrade
-
-sudo apt install certbot
-sudo apt install certbot python3-certbot-apache
-
-sudo certbot --apache --agree-tos --redirect --uir --hsts --staple-ocsp --must-staple -d burma.trade,www.burma.trade --email info@burma.trade
-
+sudo apt update && sudo apt dist-upgrade
 #add domain
 sudo nano /etc/apache2/sites-available/000-default.conf
 ServerName  burma.trade 
 ServerAlias www.burma.trade
 sudo service apache2 restart
-
-Certificate Auto Renewal
-
-To automatically renew Let’s Encrypt certificate, simply edit root user’s crontab file.
+###
+Install SSL:
+###
+sudo snap install --classic certbot
+sudo mv /usr/bin/certbot /usr/bin/certbot_old
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+sudo certbot --apache --register-unsafely-without-email --redirect
+###
+Certificate Auto Renewal, To automatically renew Let’s Encrypt certificate, simply edit root user’s crontab file.
 
 sudo crontab -e
 
@@ -519,23 +575,15 @@ Then add the following line at the bottom.
 
 @daily certbot renew --quiet && systemctl reload apache2
 
---quiet flag will suppress normal messages. If you want to receive error messages, then add the following line at the beginning of crontab file.
+#--quiet flag will suppress normal messages. If you want to receive error messages, then add the following line at the beginning of crontab file.
 
 MAILTO=your-email-address
 
-echo "That's it! We're done. Open your browser and navigate"
-echo "to http://yourserver/ and finish setup"
--"
-echo ""
-
-
-sudo a2ensite ossm.conf
 sudo /etc/init.d/apache2 restart
 sudo systemctl reload apache2
 
-
-https://www.linuxtuto.com/how-to-install-apache-with-lets-encrypt-on-ubuntu-22-04/
-https://gist.github.com/shafiqsaaidin/c0d61921b16af45cae856f4173a28592
-https://serverspace.io/support/help/how-to-get-lets-encrypt-ssl-on-ubuntu/
-https://www.opensource-socialnetwork.org/discussion/view/2520/switch-from-http-to-https-with-ossn
-
+echo "That's it! We're done. Open your browser and navigate"
+echo "to http://yourserver/ and finish setup"
+# Change http to https in # cd /var/www/public_html/ossm/configurations$ sudo nano ossn.config.site.php
+-"
+echo ""
