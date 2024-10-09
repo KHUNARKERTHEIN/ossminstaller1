@@ -177,7 +177,7 @@ APACHE=/etc/apache2/sites-available
 sudo cp $APACHE/000-default.conf $APACHE/000-default.conf.bak
 #sudo rm $APACHE/000-default.conf
 cd $APACHE
-sudo wget https://raw.githubusercontent.com/KHUNARKERTHEIN/ossminstaller1/main/ossm.conf
+sudo wget https://raw.githubusercontent.com/KHUNARKERTHEIN/ossminstallerlts/main/ossm.conf
 
 # Enable mcrypt and mod_rewrite
 sudo phpenmod curl
