@@ -202,7 +202,7 @@ sudo systemctl reload apache2
 DOCROOT=/var/www/
 cd $DOCROOT
 #sudo wget https://github.com/KHUNARKERTHEIN/ossmn/archive/refs/heads/main.zip
-sudo wget https://github.com/AUNGSUBWAY/myanmar/archive/refs/heads/main.zip
+sudo wget https://github.com/AUNGSUBWAY/ossm/archive/refs/heads/main.zip
 sudo unzip main.zip
 sudo mv myanmar-main/* ossm/
 sudo rm -rf myanmar-main main.zip
