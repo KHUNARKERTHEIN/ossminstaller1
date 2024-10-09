@@ -17,7 +17,7 @@ That being said, please use a **fresh** installation of Ubuntu 16.04 and higher 
 ## How to use
 
 #### Step 1: Download the Script
-`wget https://raw.githubusercontent.com/KHUNARKERTHEIN/ossminstaller/main/ossminstaller.sh`
+`wget https://raw.githubusercontent.com/KHUNARKERTHEIN/ossminstallerlts/main/ossminstaller.sh`
 
 #### Step 2: Make installer script executable
 `chmod +x ./ossminstaller.sh`
