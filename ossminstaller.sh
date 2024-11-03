@@ -174,11 +174,12 @@ sudo /etc/init.d/apache2 restart
 
 #-sudo mysql -e "show engines"
 #If you would like to continue to use the unix_socket method, then edit the 50-server.cnf file.
-#-sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
+#sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
 #Add the following line in the [mariadb] unit at the bottom.
 #plugin_load_add = auth_socket
 #Save and close the file. Then restart MariaDB server for the change to take effect.
 #sudo systemctl restart mariadb
+
 # Set up MySQL Database. This can be done by entering the following command
 clear
 #echo "CREATE DATABASE ossn"
@@ -189,7 +190,7 @@ clear
 #sudo mysql -e "FLUSH PRIVILEGES"
 #sudo mysql -e "Exit"
 
-#>ls /run/php/
+# ls /run/php/
 # sudo systemctl enable mariadb
 # sudo systemctl enable apache2
 # sudo systemctl restart apache2
@@ -197,39 +198,17 @@ clear
 # sudo systemctl status mariadb
 # sudo systemctl status apache2
 
+#choose PHP as the default.
+#sudo update-alternatives --config php
+#sudo systemctl restart apache2
+
 # Create directories for OSSM
 DOCROOT=/var/www
 #sudo mkdir $DOCROOT/public_html
 sudo mkdir $DOCROOT/ossm
 sudo mkdir $DOCROOT/ossn_data
 #sudo rm -rf $DOCROOT/html
-
-# Backup old and create new configuration file for Apache2
-APACHE=/etc/apache2/sites-available
-sudo cp $APACHE/000-default.conf $APACHE/000-default.conf.bak
-#sudo rm $APACHE/000-default.conf
-cd $APACHE
-sudo wget https://raw.githubusercontent.com/KHUNARKERTHEIN/ossminstallerlts/main/ossm.conf
-
-# Enable mcrypt and mod_rewrite
-sudo phpenmod curl
-sudo phpenmod xml
-sudo phpenmod gd
-sudo phpenmod zip
-sudo phpenmod mbstring
-sudo a2enmod rewrite
-
-#sudo phpenmod json
-#Restart Apache for changes to take effect
-sudo service apache2 restart
-
-sudo a2ensite ossm.conf
-sudo systemctl reload apache2
-
-#systemctl status php*-fpm.service
-#sudo a2dissite 000-default.conf
-
-# Change the directory and install OSSM
+#Change the directory and install OSSM
 #cd /var/www/public_html
 DOCROOT=/var/www/
 cd $DOCROOT
@@ -248,22 +227,41 @@ sudo service apache2 restart
 #sudo rm -rf ossm-master master.zip
 #sudo service apache2 restart
 
-# Set correct ownership and permissions
-
+#Set correct ownership and permissions
 DOCROOT=/var/www/
 sudo chgrp www-data $DOCROOT/ossm*
 sudo chmod g+w $DOCROOT/ossm*
 sudo chown -R www-data:www-data $DOCROOT/ossm
 sudo chown -R www-data:www-data $DOCROOT/ossm/*
-
 # Restart Apache for changes to take effect
 sudo service apache2 restart
-
 # Finished for dir ossn_data.
 DOCROOT=/var/www/
 sudo chmod -R 755 $DOCROOT/ossn_data/
 sudo chown -R www-data:www-data $DOCROOT/ossn_data
 sudo service apache2 restart
+
+#Backup old and create new configuration file for Apache2
+APACHE=/etc/apache2/sites-available
+sudo cp $APACHE/000-default.conf $APACHE/000-default.conf.bak
+#sudo rm $APACHE/000-default.conf
+cd $APACHE
+sudo wget https://raw.githubusercontent.com/KHUNARKERTHEIN/ossminstallerlts/main/ossm.conf
+# Enable mcrypt and mod_rewrite
+sudo phpenmod curl
+sudo phpenmod xml
+sudo phpenmod gd
+sudo phpenmod zip
+sudo phpenmod mbstring
+sudo a2enmod rewrite
+#sudo phpenmod json
+#Restart Apache for changes to take effect
+sudo service apache2 restart
+sudo a2ensite ossm.conf
+sudo systemctl reload apache2
+#systemctl status php*-fpm.service
+#sudo a2dissite 000-default.conf
+
 sudo apt update
 sudo apt install ffmpeg -y
 sudo service apache2 restart
@@ -271,6 +269,10 @@ sudo service apache2 restart
 sudo apt install openssl -y
 sudo apt install nmap -y
 sudo apt install net-tools -y
+sudo netstat -lnpu
+
+#sudo ufw status verbose
+#sudo systemctl enable ufw
 
 #sudo nano /etc/hosts
 #>127.0.0.1 localhost burma.trade www.burma.trade
