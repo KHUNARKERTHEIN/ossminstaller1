@@ -154,7 +154,12 @@ sudo apt install mariadb-server mariadb-client -y
 sudo systemctl start mariadb
 sudo systemctl enable mariadb
 
-#sudo apt install mariadb-server -y
+#If you want to uninstall, Just run this command to uninstall;
+#sudo apt-get purge mariadb-* 
+#sudo apt-get purge mariadb-server
+#sudo apt autoremove
+#You may check which mariadb packages are installed with:
+#sudo dpkg -l | grep mariadb 
 #systemctl status mariadb.service
 
 # Clear screen and update user
