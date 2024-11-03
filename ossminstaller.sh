@@ -110,14 +110,15 @@ clear
 #sudo nano /etc/php/8.3/apache2/php.ini
 #zend_extension=/usr/lib/php/20230831/ioncube_loader_lin_8.3.so 
 #sudo systemctl restart apache2
+#php -v | php -m
 
-#If you use php-fpm: 
+#If you use php-fpm: ====
 #sudo nano /etc/php/8.3/fpm/php.ini				 
 #zend_extension=/usr/lib/php/20230831/ioncube_loader_lin_8.3.so
 #sudo service php8.3-fpm restart
 #sudo systemctl restart php8.3-fpm
 
-#Install IonCube Loader on Ubuntu 22.04 LTS Jammy Jellyfish
+#Install IonCube Loader on Ubuntu 22.04 LTS Jammy Jellyfish ====
 #First, make sure that all your system packages are up-to-date.
 #If you see the extracted files you can see the loaders for each PHP version: PHP8.2
 #cd ioncube
