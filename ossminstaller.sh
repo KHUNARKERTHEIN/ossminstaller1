@@ -14,6 +14,10 @@
 #sudo chmod 600 ~/.ssh/authorized_keys
 #exit
 
+#sudo apt update
+#sudo apt install ubuntu-advantage-tools
+#sudo pro attach xxxxxxxxxxxxxxxxxxxxxxx
+
 # Disclaimer
 clear
 echo ""
