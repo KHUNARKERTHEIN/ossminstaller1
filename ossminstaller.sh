@@ -325,15 +325,6 @@ sudo apache2ctl configtest && sudo systemctl restart apache2
 #should technically correspond to this: add the following line at the bottom;
 #$cfg['SendErrorReports'] = 'never';
 #sudo systemctl restart apache2
-#fix phpmyadmin root log in error
-#sudo systemctl status mysql.service
-#sudo mysql
-#mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1';
-#sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1'"
-#Exit; or \q
-#sudo systemctl restart apache2
-#login:ip/phpmyadmin with 
-#root and passwd.
 
 # Set up MySQL Database. This can be done by entering the following command
 clear
@@ -344,6 +335,20 @@ clear
 #sudo mysql -e "GRANT ALL PRIVILEGES ON ossm.* TO 'ossm'@'localhost' IDENTIFIED BY 'Development1'"
 #sudo mysql -e "FLUSH PRIVILEGES"
 #sudo mysql -e "Exit"
+
+#fix phpmyadmin root log in error
+#sudo systemctl status mysql.service
+#sudo mysql
+#mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1';
+#sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1'"
+#Exit; or \q
+#sudo systemctl restart apache2
+#login:ip/phpmyadmin with 
+#root and passwd.
+
+#if need pass:
+#sudo mysql -u root -p
+#D1
 
 #Install SSL:
 #sudo snap install --classic certbot
@@ -393,7 +398,6 @@ echo " -
 sudo apache2ctl -t
 sudo systemctl restart apache2
 sudo systemctl restart mariadb
-sudo mysql -u root
 sudo systemctl status mysql.service
 #choose PHP as the default.
 sudo update-alternatives --config php
