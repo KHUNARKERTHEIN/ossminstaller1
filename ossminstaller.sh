@@ -5,6 +5,15 @@
 # 16.04+ and will not work on non-Ubuntu
 # distributions.
 
+#ssh-keygen -t rsa -b 4096
+#cat .ssh/id_rsa.pub
+#copy====keygen===
+#sudo mkdir ~/.ssh
+#sudo nano ~/.ssh/authorized_keys
+#paste===keygen===
+#sudo chmod 600 ~/.ssh/authorized_keys
+#exit
+
 # Disclaimer
 clear
 echo ""
@@ -39,6 +48,13 @@ sudo ufw enable
 sudo apache2ctl -t
 sudo systemctl enable ufw
 sudo systemctl reload apache2
+
+#sudo apt install ssh
+#sudo service ssh status
+#sudo service ssh restart
+#sudo lsof -i -n -P | grep LISTEN
+#grep Port /etc/ssh/sshd_config
+#ssh -lroot -p22 00.00.00.00
 
 #Install PHP
 sudo apt install software-properties-common
@@ -77,6 +93,11 @@ sudo apt install php8.4-sqlite3
 sudo apt install php8.4-imap
 sudo apache2ctl -t
 
+# ls /run/php/
+# sudo systemctl enable apache2
+# sudo systemctl restart apache2
+# sudo systemctl status apache2
+
 #sudo apt install php8.2-fpm
 #sudo systemctl enable php8.2-fpm
 #sudo systemctl status php8.2-fpm
@@ -103,8 +124,40 @@ sudo wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86
 sudo tar -xvzf ioncube_loaders_lin_x86-64.tar.gz
 sudo systemctl restart apache2
 clear
-#cd ioncube 
-#ls
+
+#Install IonCube Loader on Ubuntu 22.04 LTS Jammy Jellyfish ====
+#First, make sure that all your system packages are up-to-date.
+#If you see the extracted files you can see the loaders for each PHP version: PHP8.2
+#cd ioncube
+#You will see something similar to this: #ls
+#ioncube_loader_lin_8.2.so     ioncube_loader_lin_8.3.so
+#Once you have downloaded the IonCube Loader, you need to move it to the PHP extension directory.
+#php -i | grep extension_dir
+#extension_dir => /usr/lib/php/20220829 => /usr/lib/php/20220829
+
+#cd ioncube
+#sudo cp ioncube_loader_lin_8.2.so /usr/lib/php/20220829
+#Next, we check which PHP configuration is working by typing the following command:
+#php --ini | grep "Loaded Configuration File"
+#php -i | grep php.ini
+#/etc/php/8.2/cli/php.ini (For PHP CLI)
+#/etc/php/8.2/apache2/php.ini (For PHP with Apache2) 
+#If you have a different version of PHP installed, the location of the file will be different.
+#Now open your php.ini file using the following command below: Add the following line at the end of the php.ini file:Ctl+w (;ffi.preload=):
+#sudo nano /etc/php/8.2/cli/php.ini
+#zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
+#sudo nano /etc/php/8.2/apache2/php.ini
+#zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so 
+#sudo systemctl restart apache2
+#php -v | php -m
+
+#If you use php-fpm:
+#sudo nano /etc/php/8.2/fpm/php.ini				
+#zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
+#sudo service php8.2-fpm restart
+#sudo systemctl restart php8.2-fpm
+
+#cd ioncube #ls
 #ioncube_loader_lin_8.2.so     ioncube_loader_lin_8.3.so
 #php -i | grep extension_dir
 #extension_dir => /usr/lib/php/20230831 => /usr/lib/php/20230831
@@ -129,42 +182,30 @@ clear
 #sudo service php8.3-fpm restart
 #sudo systemctl restart php8.3-fpm
 
-#Install IonCube Loader on Ubuntu 22.04 LTS Jammy Jellyfish ====
-#First, make sure that all your system packages are up-to-date.
-#If you see the extracted files you can see the loaders for each PHP version: PHP8.2
-#cd ioncube
-#You will see something similar to this: #ls
-#ioncube_loader_lin_8.2.so     ioncube_loader_lin_8.3.so
-#Once you have downloaded the IonCube Loader, you need to move it to the PHP extension directory.
-#php -i | grep extension_dir
-#extension_dir => /usr/lib/php/20220829 => /usr/lib/php/20220829
-#cd ioncube
-#sudo cp ioncube_loader_lin_8.2.so /usr/lib/php/20220829
-#Next, we check which PHP configuration is working by typing the following command:
-#php --ini | grep "Loaded Configuration File"
-#php -i | grep php.ini
-#/etc/php/8.2/cli/php.ini (For PHP CLI)
-#/etc/php/8.2/apache2/php.ini (For PHP with Apache2) 
-#If you have a different version of PHP installed, the location of the file will be different.
-#Now open your php.ini file using the following command below: Add the following line at the end of the php.ini file:
-#sudo nano /etc/php/8.2/cli/php.ini
-#zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
-#sudo nano /etc/php/8.2/apache2/php.ini
-#zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so 
-#sudo systemctl restart apache2
-#php -v | php -m
+sudo apt update
+sudo apt install ffmpeg -y
 
-#If you use php-fpm:
-#sudo nano /etc/php/8.2/fpm/php.ini				
-#zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
-#sudo service php8.2-fpm restart
-#sudo systemctl restart php8.2-fpm
+sudo apt install openssl -y
+sudo apt install nmap -y
+#nmap 00.00.00.00
+sudo apt install net-tools -y
+sudo netstat -lnpu
+#sudo ufw status verbose
+sudo apt-get install mtr
+#mtr 00.00.00.00
+sudo apt install libcanberra-gtk-module libcanberra-gtk3-module
+#sudo apt-get install libcanberra-gtk-module
+#sudo apt-get install --reinstall libcanberra-gtk-module
+sudo apt-get install libcanberra-gtk*
+sudo service apache2 restart
+sudo apt update && sudo apt dist-upgrade
 
 #install Mariadb
 sudo apt install mariadb-server mariadb-client -y
 sudo systemctl start mariadb
 sudo systemctl enable mariadb
-
+#sudo systemctl restart mariadb
+#sudo systemctl status mariadb
 #If you want to uninstall, Just run this command to uninstall;
 #sudo apt-get purge mariadb-* 
 #sudo apt-get purge mariadb-server
@@ -173,17 +214,16 @@ sudo systemctl enable mariadb
 #sudo dpkg -l | grep mariadb 
 #systemctl status mariadb.service
 
-# Clear screen and update user
+#Clear screen and update user
 clear
 echo "Starting MySQL Secure Installation..."
 echo ""
 
 #Set up mysql_secure_installation
-
 sudo mysql_secure_installation
 sudo /etc/init.d/apache2 restart
 
-#-sudo mysql -e "show engines"
+#sudo mysql -e "show engines"
 #If you would like to continue to use the unix_socket method, then edit the 50-server.cnf file.
 #sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
 #Add the following line in the [mariadb] unit at the bottom.
@@ -191,26 +231,26 @@ sudo /etc/init.d/apache2 restart
 #Save and close the file. Then restart MariaDB server for the change to take effect.
 #sudo systemctl restart mariadb
 
-# Set up MySQL Database. This can be done by entering the following command
-clear
-#echo "CREATE DATABASE ossn"
-#echo ""
-#sudo mysql -e "CREATE DATABASE ossm"
-#sudo mysql -e "CREATE USER ossm"
-#sudo mysql -e "GRANT ALL PRIVILEGES ON ossm.* TO 'ossm'@'localhost' IDENTIFIED BY 'Development1'"
-#sudo mysql -e "FLUSH PRIVILEGES"
-#sudo mysql -e "Exit"
-
-# ls /run/php/
-# sudo systemctl enable mariadb
-# sudo systemctl enable apache2
-# sudo systemctl restart apache2
-# sudo systemctl restart mariadb
-# sudo systemctl status mariadb
-# sudo systemctl status apache2
-
 #choose PHP as the default.
 #sudo update-alternatives --config php
+#sudo systemctl restart apache2
+
+#sudo nano /etc/hosts
+#127.0.0.1 localhost myan-mar.com www.myan-mar.com
+#34.142.231.242 myan-mar.com www.myan-mar.com
+#Save the hosts file. Otherwise, you will get an error "MOD_REWRITE REQUIRED".
+#sudo systemctl restart apache2
+#sudo nano /etc/hostname
+#set fqdn mail.myan-mar.com
+#Open an Apache config file to set the Global ServerName 
+#sudo nano /etc/apache2/apache2.conf
+#Add this line at the end of the file, then save and exit your server IP
+#ServerName 34.142.231.242
+#Check for any syntax errors we may have introduced
+#sudo apache2ctl configtest
+#Enable Apache rewrite (this resolves most post-installation 404 errors) 
+#sudo a2enmod rewrite
+#Restart Apache for any changes to take effect 
 #sudo systemctl restart apache2
 
 # Create directories for OSSM
@@ -273,18 +313,6 @@ sudo systemctl reload apache2
 #systemctl status php*-fpm.service
 #sudo a2dissite 000-default.conf
 
-sudo apt update
-sudo apt install ffmpeg -y
-sudo service apache2 restart
-
-sudo apt install openssl -y
-sudo apt install nmap -y
-sudo apt install net-tools -y
-sudo netstat -lnpu
-
-#sudo ufw status verbose
-#sudo systemctl enable ufw
-
 # Install phpmyadmin
 sudo apt install phpmyadmin -y
 sudo apache2ctl configtest && sudo systemctl restart apache2
@@ -303,22 +331,39 @@ sudo apache2ctl configtest && sudo systemctl restart apache2
 #login:ip/phpmyadmin with 
 #root and passwd.
 
-#sudo nano /etc/hosts
-#127.0.0.1 localhost myan-mar.com www.myan-mar.com
-#34.142.231.242 myan-mar.com www.myan-mar.com
-#Save the hosts file. Otherwise, you will get an error "MOD_REWRITE REQUIRED".
-#sudo systemctl restart apache2
+# Set up MySQL Database. This can be done by entering the following command
+clear
+#echo "CREATE DATABASE ossn"
+#echo ""
+#sudo mysql -e "CREATE DATABASE ossm"
+#sudo mysql -e "CREATE USER ossm"
+#sudo mysql -e "GRANT ALL PRIVILEGES ON ossm.* TO 'ossm'@'localhost' IDENTIFIED BY 'Development1'"
+#sudo mysql -e "FLUSH PRIVILEGES"
+#sudo mysql -e "Exit"
 
-#Open an Apache config file to set the Global ServerName 
-#sudo nano /etc/apache2/apache2.conf
-#Add this line at the end of the file, then save and exit your server IP
-#ServerName 34.142.231.242
-#Check for any syntax errors we may have introduced
-#sudo apache2ctl configtest
-#Enable Apache rewrite (this resolves most post-installation 404 errors) 
-#sudo a2enmod rewrite
-#Restart Apache for any changes to take effect 
-#sudo systemctl restart apache2
+#Install SSL:
+#sudo snap install --classic certbot
+#sudo mv /usr/bin/certbot /usr/bin/certbot_old
+#sudo ln -s /snap/bin/certbot /usr/bin/certbot
+
+#sudo certbot --apache --register-unsafely-without-email --redirect
+#sudo systemctl reload apache2
+
+
+#Auto-Renew TLS Certificate
+#sudo crontab -e
+#@daily sudo -H pip3 install --upgrade youtube-dl > /dev/null
+#@daily certbot renew --quiet && systemctl reload apache2
+
+#You can create Cron job to automatically renew TLS certificate. Simply open root user’s crontab file.
+#sudo crontab -e
+#@daily certbot renew --quiet && systemctl reload postfix dovecot nginx
+#@daily certbot renew --quiet && systemctl reload postfix dovecot apache2
+
+#http://yourserver/ and finish setup
+#cd /var/www/ossm/configurations
+#Change http to https
+#sudo nano ossn.config.site.php
 
 clear
 echo ""
@@ -337,32 +382,15 @@ echo ""
 echo "For issues, please visit https://github.com/KHUNARKERTHEIN/"
 echo ""
 echo "11.OSSM Installer need to run the following tasks:"
-echo " -
-#Access OSSN web installer
-Open your web browser and type the URL http://example.com or IP .
-#Make sure all the requirements are met. and run for dir.
 
+echo " -
+#Access OSSN web installer, Open your web browser and type the URL http://example.com or IP .
+#Make sure all the requirements are met. and run for dir.
 sudo apache2ctl -t
 sudo systemctl restart apache2
-
-#MySQL fIX :
-sudo mysql
-sudo mysql -u root
-show engines;
-sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
-Add the following line in the [mariadb] unit at the bottom.
-plugin_load_add = auth_socket
-Save and close the file. Then restart MariaDB server for the change to take effect.
 sudo systemctl restart mariadb
 sudo mysql -u root
-MariaDB [(none)]> CREATE DATABASE ossm;
-MariaDB [(none)]> CREATE USER ossm;
-MariaDB [(none)]> GRANT ALL PRIVILEGES ON ossm.* TO 'ossm'@'localhost' IDENTIFIED BY 'Development1';
-MariaDB [(none)]> FLUSH PRIVILEGES;
-MariaDB [(none)]> EXIT;
-
 sudo systemctl status mysql.service
-
 #choose PHP as the default.
 sudo update-alternatives --config php
 sudo systemctl restart apache2
@@ -370,22 +398,6 @@ ls /run/php/
 sudo systemctl status php8.2-fpm
 systemctl status php*-fpm.service
 ls  -1 /etc/php/8.2/fpm
-sudo nano /etc/hosts
-127.0.0.1 localhost burma.trade www.burma.trade
-34.16.21.71 burma.trade www.burma.trade
-#Save the hosts file. Otherwise, you will get an error "MOD_REWRITE REQUIRED".
-sudo systemctl restart apache2
-
-#Open an Apache config file to set the Global ServerName 
-sudo nano /etc/apache2/apache2.conf
-#Add this line at the end of the file, then save and exit your server IP
-ServerName 34.16.21.71
-Check for any syntax errors we may have introduced
-sudo apache2ctl configtest
-Enable Apache rewrite (this resolves most post-installation 404 errors) 
-sudo a2enmod rewrite
-Restart Apache for any changes to take effect 
-sudo systemctl restart apache2
 
 Enable Apache through the firewall that we enabled earlier
 #Enable ufw firewall
@@ -405,17 +417,20 @@ sudo ufw status verbose
 sudo systemctl enable ufw
 sudo apache2ctl -t
 sudo systemctl reload apache2
+
+sudo apt-get install mtr
+mtr 35.197.157.247
+sudo apt install libcanberra-gtk-module libcanberra-gtk3-module
+sudo apt-get install libcanberra-gtk-module
+sudo apt-get install --reinstall libcanberra-gtk-module
+sudo apt-get install libcanberra-gtk*
+sudo apt update && sudo apt dist-upgrade
+
 #how-to-install-and-use-ffmpeg-in-ubuntu/
 sudo apt update
 sudo apt install ffmpeg -y
 #verify if everything installed correctly, including all the dependency libraries, with the following command.
 ffmpeg -version | ffmpeg -encoders | ffmpeg -decoders
-#add domain
-sudo nano /etc/apache2/sites-available/000-default.conf
-add this; dir.
-ServerName  burma.trade 
-ServerAlias www.burma.trade
-save;
 sudo service apache2 restart
 sudo apt update && sudo apt upgrade -y
 #To test that Apache is working, simply visit the IP address of your server. You should see a test page 
@@ -461,80 +476,8 @@ nano /etc/php/8.2/cli/php.ini
 -max_input_time=1800
 -max_input_vars=10000
 sudo systemctl restart apache2
--sudo apt install phpmyadmin -y
--phpmyadmin-deprecation-notice error fix=
-Edit the following file : config.inc.php. It can be located in /etc/phpmyadmin/config.inc.php or in /usr/share/phpmyadmin/config.inc.php
-sudo nano /etc/phpmyadmin/config.inc.php
-I though that this should technically correspond to this: add the end:
-$cfg['SendErrorReports'] = 'never';
-systemctl restart apache2
-fix: ===========phpmyadmin root log in error:
-systemctl status mysql.service
-sudo mysql
-mysql> 
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1'; 
-## or admin@:
-Exit; or \q and now run:systemctl restart apache2
-login:ip/phpmyadmin:root=pw:
-sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1'"
-##
-Install IonCube Loader on Ubuntu 22.04 LTS Jammy Jellyfish
-Step 1. First, make sure that all your system packages are up-to-date by running the following apt commands in the terminal.
-sudo apt update && sudo apt upgrade -y
-sudo apt install wget apt-transport-https gnupg2 software-properties-common
-Step 2. By default, IonCube is not available on Ubuntu 22.04 base repository. The following command below to download the latest.
-sudo wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
-Next, extract the downloaded file using the following command:
-sudo tar -xvzf ioncube_loaders_lin_x86-64.tar.gz
-If you see the extracted files you can see the loaders for each PHP version:
-cd ioncube
-ls
-You will see something similar to this:
-ioncube_loader_lin_7.0.so     ioncube_loader_lin_8.1.so
-Step 3. PHP Configuration File.
-Once you have downloaded the IonCube Loader, you need to move it to the PHP extension directory.
-
-php -i | grep extension_dir
-You should see the following output:
-extension_dir => /usr/lib/php/20220829 => /usr/lib/php/20220829
-cd ioncube
-sudo cp ioncube_loader_lin_8.2.so /usr/lib/php/20220829
-Next, we check which PHP configuration is working by typing the following command:
-php --ini | grep "Loaded Configuration File"
-php -i | grep php.ini
-Output:
-/etc/php/8.1/cli/php.ini (For PHP CLI)
-/etc/php/8.1/apache2/php.ini (For PHP with Apache2)
-If you have a different version of PHP installed, the location of the file will be different.
-Now open your php.ini file using the following command below:
-#sudo nano /etc/php/8.2/cli/php.ini
-zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
-
-#sudo nano /etc/php/8.2/apache2/php.ini
-zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
-Add the following line at the end of the php.ini file
-
-#sudo nano /etc/php/8.2/fpm/php.ini
-zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
-sudo service php8.2-fpm restart
-sudo systemctl restart php8.2-fpm
-
-sudo systemctl restart apache2
-
-Finally, check the installed PHP version.
-php -v
 
 #Install SSL
-
-Install SSL:
-
-sudo snap install --classic certbot
-#sudo mv /usr/bin/certbot /usr/bin/certbot_old
-sudo ln -s /snap/bin/certbot /usr/bin/certbot
-
-sudo certbot --apache --register-unsafely-without-email --redirect
-sudo systemctl reload apache2
-#===
 https://certbot.eff.org/
 sudo apt-get remove certbot
 sudo snap install --classic certbot
@@ -564,19 +507,7 @@ sudo systemctl status certbot.timer
 sudo certbot renew --dry-run --agree-tos
 sudo certbot revoke --cert-path /etc/letsencrypt/live/burma.trade/cert.pem
 ###
-sudo apt install ssh
-sudo service ssh status
-sudo lsof -i -n -P | grep LISTEN
-sudo service ssh restart
-grep Port /etc/ssh/sshd_config
-###
-ssh -lroot -p22 35.197.157.247
-sudo apt-get install mtr
-mtr 35.197.157.247
-sudo apt install libcanberra-gtk-module libcanberra-gtk3-module
-sudo apt-get install libcanberra-gtk-module
-sudo apt-get install --reinstall libcanberra-gtk-module
-sudo apt-get install libcanberra-gtk*
+
 ###
 burma.trade. IN CAA 0 issue "letsencrypt.org"
 burma.trade. IN CAA 0 iodef "mailto:your-email-address"
@@ -598,7 +529,7 @@ sudo cp /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-availab
 sudo cp /etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled/000-default.conf.bak
 sudo cp /etc/apache2/sites-enabled/000-default-le-ssl.conf /etc/apache2/sites-enabled/000-default-le-ssl.conf.bak
 sudo mv 000-default.conf.bak 000-default.conf.baks
-sudo apt update && sudo apt dist-upgrade
+
 #add domain
 sudo nano /etc/apache2/sites-available/000-default.conf
 ServerName  burma.trade 
@@ -615,12 +546,10 @@ sudo certbot --apache --register-unsafely-without-email --redirect
 Certificate Auto Renewal, To automatically renew Let’s Encrypt certificate, simply edit root user’s crontab file.
 
 sudo crontab -e
-
 Then add the following line at the bottom.
-
 @daily certbot renew --quiet && systemctl reload apache2
 
-#--quiet flag will suppress normal messages. If you want to receive error messages, then add the following line at the beginning of crontab file.
+#quiet flag will suppress normal messages. If you want to receive error messages, then add the following line at the beginning of crontab file.
 
 MAILTO=your-email-address
 
