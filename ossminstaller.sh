@@ -336,7 +336,8 @@ clear
 #sudo mysql -e "FLUSH PRIVILEGES"
 #sudo mysql -e "Exit"
 
-#fix phpmyadmin root log in error
+#==========================================
+#fix phpmyadmin root log in error 
 #sudo systemctl status mysql.service
 #sudo mysql
 #mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1';
@@ -346,9 +347,15 @@ clear
 #login:ip/phpmyadmin with 
 #root and passwd.
 
-#if need pass:
-#sudo mysql -u root -p
+#if need pass:                    
+#sudo mysql -u root -p 
 #D1
+#mysql> CREATE DATABASE ossm;
+#mysql> CREATE USER ossm;
+#mysql> GRANT ALL PRIVILEGES ON ossm.* TO 'ossm'@'localhost' IDENTIFIED BY 'Development1';
+#mysql> FLUSH PRIVILEGES;
+#mysql> EXIT
+#==========================================
 
 #Install SSL:
 #sudo snap install --classic certbot
@@ -357,7 +364,6 @@ clear
 
 #sudo certbot --apache --register-unsafely-without-email --redirect
 #sudo systemctl reload apache2
-
 
 #Auto-Renew TLS Certificate
 #sudo crontab -e
