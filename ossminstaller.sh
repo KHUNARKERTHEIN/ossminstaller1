@@ -274,38 +274,40 @@ sudo netstat -lnpu
 #sudo ufw status verbose
 #sudo systemctl enable ufw
 
-#sudo nano /etc/hosts
-#>127.0.0.1 localhost burma.trade www.burma.trade
-#>34.142.231.242 burma.trade www.burma.trade
-#Save the hosts file. Otherwise, you will get an error "MOD_REWRITE REQUIRED".
-#>sudo systemctl restart apache2
-#Open an Apache config file to set the Global ServerName 
-#>sudo nano /etc/apache2/apache2.conf
-#Add this line at the end of the file, then save and exit your server IP
-#>ServerName 34.142.231.242
-#Check for any syntax errors we may have introduced
-#>sudo apache2ctl configtest
-#Enable Apache rewrite (this resolves most post-installation 404 errors) 
-#>sudo a2enmod rewrite
-#Restart Apache for any changes to take effect 
-#>sudo systemctl restart apache2
-
 # Install phpmyadmin
 sudo apt install phpmyadmin -y
 sudo apache2ctl configtest && sudo systemctl restart apache2
-#fix:phpmyadmin-deprecation-notice error /usr/share/phpmyadmin/config.inc.php or
-#>sudo nano /etc/phpmyadmin/config.inc.php
-#should technically correspond to this: at the bottom;
-#>$cfg['SendErrorReports'] = 'never';
-#>sudo systemctl restart apache2
-#fix:phpmyadmin root log in error
-#>sudo systemctl status mysql.service
-#>sudo mysql
-#>mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1';
-#> sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1'"
-#Exit; or \q and now run
+#fix phpmyadmin-deprecation-notice error /usr/share/phpmyadmin/config.inc.php or
+#sudo nano /etc/phpmyadmin/config.inc.php
+#should technically correspond to this: add the following line at the bottom;
+#$cfg['SendErrorReports'] = 'never';
 #sudo systemctl restart apache2
-#login:ip/phpmyadmin with root and passwd.
+#fix phpmyadmin root log in error
+#sudo systemctl status mysql.service
+#sudo mysql
+#mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1';
+#sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1'"
+#Exit; or \q
+#sudo systemctl restart apache2
+#login:ip/phpmyadmin with 
+#root and passwd.
+
+#sudo nano /etc/hosts
+#127.0.0.1 localhost myan-mar.com www.myan-mar.com
+#34.142.231.242 myan-mar.com www.myan-mar.com
+#Save the hosts file. Otherwise, you will get an error "MOD_REWRITE REQUIRED".
+#sudo systemctl restart apache2
+
+#Open an Apache config file to set the Global ServerName 
+#sudo nano /etc/apache2/apache2.conf
+#Add this line at the end of the file, then save and exit your server IP
+#ServerName 34.142.231.242
+#Check for any syntax errors we may have introduced
+#sudo apache2ctl configtest
+#Enable Apache rewrite (this resolves most post-installation 404 errors) 
+#sudo a2enmod rewrite
+#Restart Apache for any changes to take effect 
+#sudo systemctl restart apache2
 
 clear
 echo ""
@@ -328,11 +330,11 @@ echo " -
 #Access OSSN web installer
 Open your web browser and type the URL http://example.com or IP .
 #Make sure all the requirements are met. and run for dir.
-sudo chown -R www-data:www-data /var/www/ossn_data
-sudo chmod -R 755 /var/www/ossn_data/
+
 sudo apache2ctl -t
 sudo systemctl restart apache2
-#mySQL fIX
+
+#MySQL fIX :
 sudo mysql
 sudo mysql -u root
 show engines;
@@ -347,20 +349,8 @@ MariaDB [(none)]> CREATE USER ossm;
 MariaDB [(none)]> GRANT ALL PRIVILEGES ON ossm.* TO 'ossm'@'localhost' IDENTIFIED BY 'Development1';
 MariaDB [(none)]> FLUSH PRIVILEGES;
 MariaDB [(none)]> EXIT;
-#fix:phpmyadmin-deprecation-notice error /usr/share/phpmyadmin/config.inc.php or
-sudo nano /etc/phpmyadmin/config.inc.php
-should technically correspond to this: at the bottom;
-$cfg['SendErrorReports'] = 'never';
-sudo systemctl restart apache2
-#fix:phpmyadmin root log in error
-sudo systemctl status mysql.service
 
-sudo mysql
-mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'Development1';
-Exit; or \q and now run
-systemctl restart apache2
-login:ip/phpmyadmin
-root and pass
+sudo systemctl status mysql.service
 
 #choose PHP as the default.
 sudo update-alternatives --config php
