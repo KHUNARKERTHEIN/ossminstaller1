@@ -584,6 +584,6 @@ sudo systemctl reload apache2
 
 echo "That's it! We're done. Open your browser and navigate"
 echo "to http://yourserver/ and finish setup"
-# Change http to https in # cd /var/www/public_html/ossm/configurations$ sudo nano ossn.config.site.php
+# Change http to https in # cd /var/www/ossm/configurations$ sudo nano ossn.config.site.php
 -"
 echo ""
