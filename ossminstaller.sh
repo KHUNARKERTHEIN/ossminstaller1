@@ -369,11 +369,13 @@ clear
 #sudo crontab -e
 #@daily sudo -H pip3 install --upgrade youtube-dl > /dev/null
 #@daily certbot renew --quiet && systemctl reload apache2
+#*/5 * * * * /usr/bin/php /var/www/ossm/components/Videos/cron.php > /dev/null 2>&1
 
 #You can create Cron job to automatically renew TLS certificate. Simply open root user’s crontab file.
 #sudo crontab -e
 #@daily certbot renew --quiet && systemctl reload postfix dovecot nginx
 #@daily certbot renew --quiet && systemctl reload postfix dovecot apache2
+
 
 #http://yourserver/ and finish setup
 #cd /var/www/ossm/configurations
