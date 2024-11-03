@@ -55,6 +55,17 @@ sudo apt install php8.2-sqlite3
 sudo apt install php8.2-imap
 sudo apache2ctl -t
 
+sudo apt update
+sudo apt install php8.3-cli
+sudo apt install php8.3 libapache2-mod-php8.3 php8.3-mysql php8.3-soap php8.3-bcmath php8.3-xml php8.3-mbstring php8.3-gd php8.3-common php8.3-cli php8.3-curl php8.3-intl php8.3-dev php8.3-zip zip unzip -y
+sudo apt install php8.3-{bcmath,common,xml,mysql,zip,intl,ldap,gd,cli,bz2,curl,mbstring,pgsql,opcache,soap,xsl,cgi} -y
+sudo apt-get install php8.3-phpdbg
+sudo apt-get install libphp8.3-embed
+sudo apt install php8.3-imagick
+sudo apt install php8.3-sqlite3
+sudo apt install php8.3-imap
+sudo apache2ctl -t
+
 #sudo apt install php8.2-fpm
 #sudo systemctl enable php8.2-fpm
 #sudo systemctl status php8.2-fpm
