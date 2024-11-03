@@ -66,6 +66,17 @@ sudo apt install php8.3-sqlite3
 sudo apt install php8.3-imap
 sudo apache2ctl -t
 
+sudo apt update
+sudo apt install php8.4-cli
+sudo apt install php8.4 libapache2-mod-php8.4 php8.4-mysql php8.4-soap php8.4-bcmath php8.4-xml php8.4-mbstring php8.4-gd php8.4-common php8.4-cli php8.4-curl php8.4-intl php8.4-dev php8.4-zip zip unzip -y
+sudo apt install php8.4-{bcmath,common,xml,mysql,zip,intl,ldap,gd,cli,bz2,curl,mbstring,pgsql,opcache,soap,xsl,cgi} -y
+sudo apt-get install php8.4-phpdbg
+sudo apt-get install libphp8.4-embed
+sudo apt install php8.4-imagick
+sudo apt install php8.4-sqlite3
+sudo apt install php8.4-imap
+sudo apache2ctl -t
+
 #sudo apt install php8.2-fpm
 #sudo systemctl enable php8.2-fpm
 #sudo systemctl status php8.2-fpm
