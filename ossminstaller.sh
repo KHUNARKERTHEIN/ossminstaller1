@@ -525,6 +525,16 @@ Finally, check the installed PHP version.
 php -v
 
 #Install SSL
+
+Install SSL:
+
+sudo snap install --classic certbot
+#sudo mv /usr/bin/certbot /usr/bin/certbot_old
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+
+sudo certbot --apache --register-unsafely-without-email --redirect
+sudo systemctl reload apache2
+#===
 https://certbot.eff.org/
 sudo apt-get remove certbot
 sudo snap install --classic certbot
@@ -532,9 +542,9 @@ certbot --version
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo certbot --apache
 sudo certbot certonly --apache
-#burma.trade,www.burma.trade
+burma.trade,www.burma.trade
 sudo systemctl reload apache2
-#
+#==
 apachectl -M | grep ssl
 sudo a2enmod ssl
 sudo systemctl restart apache2
