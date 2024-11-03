@@ -4,6 +4,10 @@
 # This version intended for Ubuntu Server
 # 16.04+ and will not work on non-Ubuntu
 # distributions.
+#how to check ipv6 address in linux
+#ip -6 addr
+#ip addr | grep inet6
+#ip -6 addr show scope global 
 
 #ssh-keygen -t rsa -b 4096
 #cat .ssh/id_rsa.pub
@@ -571,6 +575,18 @@ MAILTO=your-email-address
 
 sudo /etc/init.d/apache2 restart
 sudo systemctl reload apache2
+
+To check your IPv6 address in Linux, you can use the following commands:
+ifconfig -a: Look for inet6 in the output to see your IPv6 addresses
+netstat -nr: Look for inet6, Internet6, or similar words to find the IPv6 portion 
+You can also use the ping ipv6 command to verify if an IPv6 address is reachable and display statistics. 
+To enable or disable IPv6 on Ubuntu Linux, you can:
+Check the current IPv6 configuration with the command ip -6 addr show
+Open the GRUB configuration file with the command sudo nano /etc/default/grub
+Add ipv6.disable=1 to the line containing “GRUB_CMDLINE_LINUX_DEFAULT”
+Update GRUB with the command update-grub
+Reboot your system with the command reboot
+Verify the IPv6 status 
 
 echo "That's it! We're done. Open your browser and navigate"
 echo "to http://yourserver/ and finish setup"
