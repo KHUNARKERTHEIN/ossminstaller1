@@ -204,8 +204,8 @@ cd $DOCROOT
 #sudo wget https://github.com/KHUNARKERTHEIN/ossmn/archive/refs/heads/main.zip
 sudo wget https://github.com/AUNGSUBWAY/ossm/archive/refs/heads/main.zip
 sudo unzip main.zip
-sudo mv myanmar-main/* ossm/
-sudo rm -rf myanmar-main main.zip
+sudo mv ossm-main/* ossm/
+sudo rm -rf ossm-main main.zip
 sudo service apache2 restart
 
 #DOCROOT=/var/www/public_html/
