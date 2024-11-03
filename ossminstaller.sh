@@ -92,46 +92,61 @@ sudo wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86
 sudo tar -xvzf ioncube_loaders_lin_x86-64.tar.gz
 sudo systemctl restart apache2
 clear
+#cd ioncube 
+#ls
+#ioncube_loader_lin_8.2.so     ioncube_loader_lin_8.3.so
+#php -i | grep extension_dir
+#extension_dir => /usr/lib/php/20230831 => /usr/lib/php/20230831
+#cd ioncube
+#sudo cp ioncube_loader_lin_8.3.so /usr/lib/php/20230831
+#php --ini | grep "Loaded Configuration File"
+#php -i | grep php.ini
+#/etc/php/8.3/cli/php.ini (For PHP CLI)
+#/etc/php/8.3/apache2/php.ini (For PHP with Apache2) 
+#Now open your php.ini file using the following command below: 
+#sudo nano /etc/php/8.3/cli/php.ini				 
+#Add the following line at the end of the php.ini file: Ctl+w (;ffi.preload=):
+#zend_extension=/usr/lib/php/20230831/ioncube_loader_lin_8.3.so  
+#sudo nano /etc/php/8.3/apache2/php.ini
+#zend_extension=/usr/lib/php/20230831/ioncube_loader_lin_8.3.so 
+#sudo systemctl restart apache2
 
-#If you see the extracted files you can see the loaders for each PHP version:
-#
+#If you use php-fpm: 
+#sudo nano /etc/php/8.3/fpm/php.ini				 
+#zend_extension=/usr/lib/php/20230831/ioncube_loader_lin_8.3.so
+#sudo service php8.3-fpm restart
+#sudo systemctl restart php8.3-fpm
+
 #Install IonCube Loader on Ubuntu 22.04 LTS Jammy Jellyfish
 #First, make sure that all your system packages are up-to-date.
-#>sudo apt update && sudo apt upgrade -y
-#>sudo apt install wget apt-transport-https gnupg2 software-properties-common
-#IonCube is not available on Ubuntu 22.04 base repository. The following command below to download the latest.
-#>sudo wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
-#Next, extract the downloaded file using the following command:
-#>sudo tar -xvzf ioncube_loaders_lin_x86-64.tar.gz
-#
-#If you see the extracted files you can see the loaders for each PHP version:
-#>cd ioncube #>ls 
-#You will see something similar to this:
-#ioncube_loader_lin_8.1.so     ioncube_loader_lin_8.2.so
+#If you see the extracted files you can see the loaders for each PHP version: PHP8.2
+#cd ioncube
+#You will see something similar to this: #ls
+#ioncube_loader_lin_8.2.so     ioncube_loader_lin_8.3.so
 #Once you have downloaded the IonCube Loader, you need to move it to the PHP extension directory.
-#>php -i | grep extension_dir
-#You should see the following output:
+#php -i | grep extension_dir
 #extension_dir => /usr/lib/php/20220829 => /usr/lib/php/20220829
-#>>cd ioncube
-#>>sudo cp ioncube_loader_lin_8.2.so /usr/lib/php/20220829
+#cd ioncube
+#sudo cp ioncube_loader_lin_8.2.so /usr/lib/php/20220829
 #Next, we check which PHP configuration is working by typing the following command:
-#>php --ini | grep "Loaded Configuration File"
-#>php -i | grep php.ini
+#php --ini | grep "Loaded Configuration File"
+#php -i | grep php.ini
 #/etc/php/8.2/cli/php.ini (For PHP CLI)
 #/etc/php/8.2/apache2/php.ini (For PHP with Apache2) 
 #If you have a different version of PHP installed, the location of the file will be different.
 #Now open your php.ini file using the following command below: Add the following line at the end of the php.ini file:
-#>>> sudo nano /etc/php/8.2/cli/php.ini				 # For PHP CLI
-#>>> zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so  # and
-#>>> sudo nano /etc/php/8.2/fpm/php.ini				 # if you use php-fpm:
-#>>> zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so    #or else if apache2
-#>sudo nano /etc/php/8.1/apache2/php.ini
+#sudo nano /etc/php/8.2/cli/php.ini
+#zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
+#sudo nano /etc/php/8.2/apache2/php.ini
 #zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so 
+#sudo systemctl restart apache2
+#php -v | php -m
+
+#If you use php-fpm:
+#sudo nano /etc/php/8.2/fpm/php.ini				
+#zend_extension=/usr/lib/php/20220829/ioncube_loader_lin_8.2.so
 #sudo service php8.2-fpm restart
 #sudo systemctl restart php8.2-fpm
-#sudo systemctl restart apache2
-#php -v | php -m | # cd 
-#
 
 #install Mariadb
 sudo apt install mariadb-server mariadb-client -y
